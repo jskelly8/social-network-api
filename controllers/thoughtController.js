@@ -108,7 +108,7 @@ const thoughtController = {
         return;
       }
 
-      res.status(200).json(thoughtData, { message: 'Reaction deleted successfully!' });
+      res.status(200).json(thoughtData);
     } catch (error) {
       console.log(error);
       res.status(500).json(error);
