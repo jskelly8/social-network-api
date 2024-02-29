@@ -5,27 +5,54 @@ const thoughtController = {
   // GET to retrieve all thoughts
   async getAllThoughts(req, res) {
     try {
+      const thoughtData = await Thought.find({})
+        .select('-__v')
+        .sort({ _id: -1 });
 
+      res.status(200).json(thoughtData);
     } catch (error) {
-
+      console.log(error);
+      res.status(500).json(error);
     }
   },
 
   // GET to retrieve a single thought by id
   async getThoughtById(req, res) {
     try {
+      const thoughtData = await Thought.findOne({ _id: req.params.id })
+        .select('-__v');
 
+      if (!thoughtData) {
+        res.status(404).json({ message: 'No thought found' });
+        return;
+      }
+
+      res.status(200).json(thoughtData);
     } catch (error) {
-
+      console.log(error);
+      res.status(500).json(error);
     }
   },
 
   // POST to create a new thought
   async createThought(req, res) {
     try {
+      const thoughtData = await Thought.create(req.body);
+      const userData = await User.findOneAndUpdate(
+        { _id: req.body.userId },
+        { $push: { thoughts: thoughtData._id } },
+        { new: true }
+      );
 
+      if (!userData) {
+        res.status(404).json({ message: 'No user found' });
+        return;
+      }
+
+      res.status(200).json(thoughtData);
     } catch (error) {
-
+      console.log(error);
+      res.status(500).json(error);
     }
   },
 
@@ -33,8 +60,10 @@ const thoughtController = {
   async updateThought(req, res) {
     try {
 
+      res.status(200).json(thoughtData);
     } catch (error) {
-
+      console.log(error);
+      res.status(500).json(error);
     }
   },
 
@@ -42,8 +71,10 @@ const thoughtController = {
   async deleteThought(req, res) {
     try {
 
+      res.status(200).json(thoughtData);
     } catch (error) {
-
+      console.log(error);
+      res.status(500).json(error);
     }
   },
 
@@ -51,8 +82,10 @@ const thoughtController = {
   async addReaction(req, res) {
     try {
 
+      res.status(200).json(thoughtData);
     } catch (error) {
-
+      console.log(error);
+      res.status(500).json(error);
     }
   },
 
@@ -60,8 +93,10 @@ const thoughtController = {
   async removeReaction(req, res) {
     try {
 
+      res.status(200).json(thoughtData);
     } catch (error) {
-
+      console.log(error);
+      res.status(500).json(error);
     }
   }
 };

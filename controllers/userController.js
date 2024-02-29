@@ -53,7 +53,11 @@ const userController = {
   // PUT to update a user by id
   async updateUser(req, res) {
     try {
-      const userData = await User.findOneAndUpdate({ _id: req.params.id }, req.body, { new: true, runValidators: true });
+      const userData = await User.findOneAndUpdate(
+        { _id: req.params.id }, 
+        req.body, 
+        { new: true, runValidators: true }
+      );
 
       if (!userData) {
         res.status(404).json({ message: 'No user found' });
@@ -90,7 +94,10 @@ const userController = {
   // POST to add a new friend to a user's friend list
   async addFriend(req, res) {
     try {
+      const userData = await User.findOneAndUpdate(
 
+      );
+      
     } catch (error) {
       console.log(error);
       res.status(500).json(error);
