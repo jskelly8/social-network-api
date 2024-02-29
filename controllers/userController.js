@@ -11,7 +11,7 @@ const userController = {
         .select('-__v')
         .sort({ id: -1 });
 
-      res.json(userData);
+      res.status(200).json(userData);
     } catch (error) {
       console.log(error);
       res.status(500).json(error);
@@ -31,7 +31,7 @@ const userController = {
         return;
       }
 
-      res.json(userData);
+      res.status(200).json(userData);
     } catch (error) {
       console.log(error);
       res.status(500).json(error);
@@ -43,7 +43,7 @@ const userController = {
     try {
       const userData = await User.create(req.body);
 
-      res.json(userData);
+      res.status(200).json(userData);
     } catch (error) {
       console.log(error);
       res.status(500).json(error);
@@ -53,7 +53,14 @@ const userController = {
   // PUT to update a user by id
   async updateUser(req, res) {
     try {
+      const userData = await User.findOneAndUpdate({ _id: req.params.id }, req.body, { new: true, runValidators: true });
 
+      if (!userData) {
+        res.status(404).json({ message: 'No user found' });
+        return;
+      }
+
+      res.status(200).json(userData);
     } catch (error) {
       console.log(error);
       res.status(500).json(error);
@@ -63,7 +70,17 @@ const userController = {
   // DELETE to remove a user by id
   async deleteUser(req, res) {
     try {
+      const userData = await User.findOneAndDelete({ _id: req.params.id });
 
+      if (!userData) {
+        res.status(404).json({ message: 'No user found' });
+        return;
+      }
+
+      // Bonus: Remove deleted user's thoughts ---------------- Not tested yet
+      await Thought.deleteMany({ _id: { $in: userData.thoughts } });
+
+      res.status(200).json(userData);
     } catch (error) {
       console.log(error);
       res.status(500).json(error);
