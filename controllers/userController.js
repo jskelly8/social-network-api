@@ -84,7 +84,7 @@ const userController = {
       // Bonus: Remove deleted user's thoughts ---------------- Not tested yet
       await Thought.deleteMany({ _id: { $in: userData.thoughts } });
 
-      res.status(200).json(userData);
+      res.status(200).json({ message: 'User and their thoughts deleted!' });
     } catch (error) {
       console.log(error);
       res.status(500).json(error);

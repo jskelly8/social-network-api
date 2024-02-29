@@ -59,6 +59,16 @@ const thoughtController = {
   // PUT to update a thought by id
   async updateThought(req, res) {
     try {
+      const thoughtData = await Thought.findOneAndUpdate(
+        { _id: req.params.id },
+        req.body,
+        { new: true, runValidators: true }
+      );
+
+      if (!thoughtData) {
+        res.status(404).json({ message: 'No thought found' });
+        return;
+      }
 
       res.status(200).json(thoughtData);
     } catch (error) {
@@ -70,8 +80,14 @@ const thoughtController = {
   // DELETE to remove a thought by id
   async deleteThought(req, res) {
     try {
+      const thoughtData = await Thought.findOneAndDelete({ _id: req.params.id });
 
-      res.status(200).json(thoughtData);
+      if (!thoughtData) {
+        res.status(404).json({ message: 'No thought found' });
+        return;
+      }
+
+      res.status(200).json({ message: 'Thought deleted successfully!' });
     } catch (error) {
       console.log(error);
       res.status(500).json(error);
