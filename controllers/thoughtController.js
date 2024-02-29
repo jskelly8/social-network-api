@@ -97,8 +97,18 @@ const thoughtController = {
   // POST to create a reaction stored in thought's reactions array
   async addReaction(req, res) {
     try {
+      const thoughtData = await Thought.findOneAndUpdate(
+        { _id: req.params.thoughtId },
+        { $push: { reactions: req.body } },
+        { new: true, runValidators: true }
+      );
 
-      res.status(200).json(thoughtData);
+      if (!thoughtData) {
+        res.status(404).json({ message: 'No thought found' });
+        return;
+      }
+
+      res.status(200).json(thoughtData, { message: 'Reaction deleted successfully!' });
     } catch (error) {
       console.log(error);
       res.status(500).json(error);
@@ -108,6 +118,16 @@ const thoughtController = {
   // DELETE to remove a reaction by reactionId
   async removeReaction(req, res) {
     try {
+      const thoughtData = await Thought.findOneAndUpdate(
+        { _id: req.params.thoughtId },
+        { $pull: { reactions: { reactionId: req.params.reactionId } } },
+        { new: true, runValidators: true }
+      );
+
+      if (!thoughtData) {
+        res.status(404).json({ message: 'No thought or reaction found' });
+        return;
+      }
 
       res.status(200).json(thoughtData);
     } catch (error) {

@@ -23,9 +23,12 @@ router.route('/:id')
     .put(updateThought) // PUT to update a thought by id
     .delete(deleteThought); // DELETE to remove a thought by id
 
-// Routes for /api/thoughts/:id/reactions
+// Routes for /api/thoughts/:thoughtId/reactions
 router.route('/:thoughtId/reactions')
     .post(addReaction) // POST to create a reaction stored in thought's reactions array
+
+// Route for /api/thoughts/:thoughtId/reactions/:reactionId
+router.route('/:thoughtId/reactions/:reactionId')
     .delete(removeReaction); // DELETE to remove a reaction by reactionId
 
 // Export
