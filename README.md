@@ -29,7 +29,7 @@ Begin the program by typing into your terminal `node server.js`/`npm run start`.
 Walkthrough video showing functionality of program:
 * Link to walkthrough video: *(click the Insomnia image)*
 
-[![Screenshot of code snippet](IMGpath)](url "Walkthrough Video")
+[![Screenshot of code snippet](./public/socialNetworkClip.png)](https://watch.screencastify.com/v/GqeQj1jYZdHjw8NX0pvf "Walkthrough Video")
 
 ## License
 
