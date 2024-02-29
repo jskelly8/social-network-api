@@ -81,7 +81,7 @@ const userController = {
         return;
       }
 
-      // Bonus: Remove deleted user's thoughts ---------------- Not tested yet
+      // Bonus: Remove deleted user's thoughts
       await Thought.deleteMany({ _id: { $in: userData.thoughts } });
 
       res.status(200).json({ message: 'User and their thoughts deleted!' });
@@ -95,9 +95,17 @@ const userController = {
   async addFriend(req, res) {
     try {
       const userData = await User.findOneAndUpdate(
-
+        { _id: req.params.userId },
+        { $addToSet: { friends: req.params.friendId } },
+        { new: true, runValidators: true}
       );
       
+      if (!userData) {
+        res.status(404).json({ message: 'No user found' });
+        return;
+      }
+
+      res.status(200).json(userData);
     } catch (error) {
       console.log(error);
       res.status(500).json(error);
@@ -107,7 +115,18 @@ const userController = {
   // DELETE to remove a friend from a user's friend list
   async removeFriend(req, res) {
     try {
+      const userData = await User.findOneAndUpdate(
+        { _id: req.params.userId },
+        { $pull: { friends: req.params.friendId } },
+        { new: true, runValidators: true }
+      );
 
+      if (!userData) {
+        res.status(404).json({ message: 'No user found' });
+        return;
+      }
+
+      res.status(200).json(userData);
     } catch (error) {
       console.log(error);
       res.status(500).json(error);
